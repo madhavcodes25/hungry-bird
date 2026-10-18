@@ -15,7 +15,8 @@ app.get('/health', async (req, res) => {
 app.use('/auth', require('./routes/auth.js'));
 app.use('/restaurants', require('./routes/restaurants'));
 app.use('/menu', require('./routes/menu'));
-
+app.use('/orders', require('./routes/orders'));
+app.use('/deliveries', require('./routes/deliveries'));
 app.use((req, res) => res.status(404).json({ error: 'route not found' }));
 
 app.use((err, req, res, next) => {
