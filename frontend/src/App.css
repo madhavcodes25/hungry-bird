@@ -1,0 +1,10 @@
+body { font-family: system-ui, sans-serif; margin: 0; }
+nav { display: flex; gap: 16px; align-items: center; padding: 12px 20px; border-bottom: 1px solid #ddd; }
+nav a:first-child { font-weight: bold; margin-right: auto; }
+main { max-width: 720px; margin: 0 auto; padding: 20px; }
+.list { list-style: none; padding: 0; }
+.list li { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+.list li > :first-child { flex: 1; }
+.error { color: #b00020; }
+form { display: grid; gap: 10px; max-width: 320px; }
+.form-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
