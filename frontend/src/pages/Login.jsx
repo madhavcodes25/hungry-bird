@@ -16,7 +16,7 @@ export default function Login() {
     setError('');
     try {
       await login(email, password);
-      navigate('/');
+      navigate('/');            // Home sends each role to its own dashboard
     } catch (err) {
       setError(err.message);
     } finally {
@@ -28,12 +28,18 @@ export default function Login() {
     <>
       <h1>Log in</h1>
       <form onSubmit={onSubmit}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
+               autoComplete="email" required />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}
+               autoComplete="current-password" required />
         <button disabled={busy}>{busy ? 'Logging in...' : 'Log in'}</button>
         {error && <p className="error">{error}</p>}
       </form>
       <p>New here? <Link to="/signup">Create an account</Link></p>
+      <p className="muted">
+        Demo accounts (after running db/seed.sql): admin@hungrybird.com / admin123, and asha@test.com,
+        rohan@test.com, ravi@test.com, meena@test.com, kiran@test.com, sunil@test.com / password123.
+      </p>
     </>
   );
 }

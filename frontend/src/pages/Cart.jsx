@@ -3,6 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import { useAuth } from '../auth';
 import { useCart } from '../cart';
+import { money } from '../orderFlow';
+
+const ADDRESS_KEY = 'hb_address';
+
+// The last address used, so a returning customer does not retype it
+function loadAddress() {
+  try { return localStorage.getItem(ADDRESS_KEY) || ''; } catch { return ''; }
+}
+function saveAddress(value) {
+  try { localStorage.setItem(ADDRESS_KEY, value); } catch { /* storage unavailable, so nothing is remembered */ }
+}
 
 export default function Cart() {
   const { token } = useAuth();
@@ -10,6 +21,7 @@ export default function Cart() {
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [couponCode, setCouponCode] = useState('');
+  const [address, setAddress] = useState(loadAddress);
   const [error, setError] = useState('');
   const [status, setStatus] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -19,8 +31,13 @@ export default function Cart() {
   }
 
   async function placeOrder() {
-    setBusy(true);
     setError('');
+    setStatus(null);
+    if (address.trim().length < 5) {
+      setError('Please enter your delivery address (at least 5 characters).');
+      return;
+    }
+    setBusy(true);
     try {
       const result = await api('/orders', {
         method: 'POST',
@@ -30,8 +47,10 @@ export default function Cart() {
           items: lines.map((l) => ({ menuItemId: l.id, quantity: l.quantity })),
           paymentMethod,
           couponCode: couponCode.trim() || undefined,
+          deliveryAddress: address.trim(),
         },
       });
+      saveAddress(result.deliveryAddress || address.trim());   // keep the tidied version the server confirmed
       clear();
       navigate(`/orders/${result.orderId}`);
     } catch (err) {
@@ -53,11 +72,16 @@ export default function Cart() {
             <button onClick={() => changeQty(l.id, -1)}>-</button>
             <span>{l.quantity}</span>
             <button onClick={() => changeQty(l.id, 1)}>+</button>
-            <span>₹{(l.price * l.quantity).toFixed(2)}</span>
+            <span>{money(l.price * l.quantity)}</span>
           </li>
         ))}
       </ul>
-      <p>Subtotal: ₹{subtotal.toFixed(2)} (the server works out the final total and any coupon discount)</p>
+      <p>Subtotal: {money(subtotal)} <span className="muted">(the server works out the final total and any coupon discount)</span></p>
+      <label>
+        Delivery address
+        <textarea rows={2} maxLength={300} value={address} onChange={(e) => setAddress(e.target.value)}
+                  placeholder="House or flat, building, street, area, city" style={{ display: 'block', width: '100%', maxWidth: 420 }} />
+      </label>
       <div className="form-row">
         <label>
           Payment{' '}

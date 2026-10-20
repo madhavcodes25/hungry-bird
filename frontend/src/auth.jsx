@@ -15,14 +15,15 @@ export function AuthProvider({ children }) {
     try {
       if (next) localStorage.setItem('hb_auth', JSON.stringify(next));
       else localStorage.removeItem('hb_auth');
-    } catch { }
+    } catch { /* storage unavailable, so stay logged in for this tab only */ }
   }
 
   async function login(email, password) {
     save(await api('/auth/login', { method: 'POST', body: { email, password } }));
   }
+  // fields: { name, email, password, role, phone?, restaurant_name?, address?, cuisine_type? }
   async function signup(fields) {
-    save(await api('/auth/signup', { method: 'POST', body: { ...fields, role: 'customer' } }));
+    save(await api('/auth/signup', { method: 'POST', body: fields }));
   }
   const logout = () => save(null);
 

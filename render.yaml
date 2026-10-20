@@ -1,0 +1,19 @@
+# Optional: a Render "Blueprint" for the backend. You can also create the service by hand in the Render
+# dashboard (see docs/deployment.md). Render's blueprint options change over time, so if this file is
+# rejected, use the manual steps instead.
+services:
+  - type: web
+    name: hungry-bird-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # paste your Neon connection string in the dashboard
+      - key: JWT_SECRET
+        generateValue: true  # Render creates a random secret for you
+      - key: CORS_ORIGIN
+        sync: false          # set to your frontend address once it is deployed

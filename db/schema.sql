@@ -1,3 +1,6 @@
+-- Hungry Bird: schema.sql
+-- PostgreSQL
+
 -- 1. User
 CREATE TYPE user_role AS ENUM ('customer', 'restaurant', 'delivery_partner', 'admin');
 
@@ -51,14 +54,17 @@ CREATE TYPE order_status AS ENUM (
 );
 
 CREATE TABLE "order" (
-    id              SERIAL PRIMARY KEY,
-    customer_id     INTEGER NOT NULL REFERENCES "user"(id),
-    restaurant_id   INTEGER NOT NULL REFERENCES restaurant_profile(id),
-    coupon_id       INTEGER REFERENCES coupon(id),
-    status          order_status NOT NULL DEFAULT 'placed',
-    total_amount    NUMERIC(10, 2) NOT NULL CHECK (total_amount >= 0),
-    discount_amount NUMERIC(10, 2) NOT NULL DEFAULT 0,
-    created_at      TIMESTAMP NOT NULL DEFAULT NOW()
+    id               SERIAL PRIMARY KEY,
+    customer_id      INTEGER NOT NULL REFERENCES "user"(id),
+    restaurant_id    INTEGER NOT NULL REFERENCES restaurant_profile(id),
+    coupon_id        INTEGER REFERENCES coupon(id),
+    status           order_status NOT NULL DEFAULT 'placed',
+    total_amount     NUMERIC(10, 2) NOT NULL CHECK (total_amount >= 0),
+    discount_amount  NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    -- Where this order is going. Stored on the order (not on the user) so that an old order keeps
+    -- showing where it was actually delivered, even if the customer later moves or uses another address.
+    delivery_address TEXT NOT NULL CHECK (char_length(btrim(delivery_address)) BETWEEN 5 AND 300),
+    created_at       TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- 6. OrderItem

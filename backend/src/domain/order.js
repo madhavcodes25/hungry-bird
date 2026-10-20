@@ -32,7 +32,7 @@ class Order {
     this.#moveTo('cancelled');
   }
 
-  forceStatus(name) {                  // admin only; the route checks the role
+  forceStatus(name) {                  // admin only
     this.#moveTo(name);
   }
 

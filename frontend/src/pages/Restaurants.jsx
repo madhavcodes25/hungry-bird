@@ -13,7 +13,12 @@ export default function Restaurants() {
         {data.map((r) => (
           <li key={r.id}>
             <Link to={`/restaurants/${r.id}`}>{r.restaurant_name}</Link>
-            <span>{r.cuisine_type} · {r.address}</span>
+            <span className="muted">{r.cuisine_type} · {r.address}</span>
+            <span>
+              {r.rating_count > 0
+                ? `★ ${Number(r.avg_rating).toFixed(1)} (${r.rating_count})`
+                : 'No ratings yet'}
+            </span>
           </li>
         ))}
       </ul>

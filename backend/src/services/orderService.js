@@ -3,16 +3,33 @@ const { AppError } = require('../errors');
 const { Order } = require('../domain/order');
 const { getPaymentMethod } = require('../domain/payments');
 const { CustomerNotifier, RestaurantNotifier, DeliveryPartnerNotifier } = require('../domain/observers');
+const { parseDeliveryAddress } = require('../validators');
 
-const DELIVERY_PAYOUT = 40;                   
+const DELIVERY_PAYOUT = 40;                      // flat payout per delivery for now
 const round2 = (n) => Math.round(n * 100) / 100;
+const withoutAddress = ({ delivery_address, ...rest }) => rest;
 
-async function placeOrder({ customerId, restaurantId, items, paymentMethod, couponCode }) {
+// Quantities are validated by the route. The CHECK constraints in the schema are the last line of defense.
+async function placeOrder({ customerId, restaurantId, items, paymentMethod, couponCode, deliveryAddress }) {
+  const address = parseDeliveryAddress(deliveryAddress);
+  if (couponCode !== undefined && couponCode !== null && typeof couponCode !== 'string') {
+    throw new AppError('couponCode must be text');
+  }
+  const code = (couponCode || '').trim();
   const method = getPaymentMethod(paymentMethod);
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
 
+    // 0. The restaurant must exist and its owner must not be banned
+    const { rows: open } = await client.query(
+      `SELECT 1 FROM restaurant_profile r JOIN "user" u ON u.id = r.user_id
+       WHERE r.id = $1 AND u.is_banned = FALSE`,
+      [restaurantId]
+    );
+    if (open.length === 0) throw new AppError('restaurant not found', 404);
+
+    // 1. Prices come from the database, never from the request
     const { rows: menu } = await client.query(
       `SELECT id, price FROM menu_item
        WHERE id = ANY($1) AND restaurant_id = $2 AND is_available = TRUE`,
@@ -28,10 +45,13 @@ async function placeOrder({ customerId, restaurantId, items, paymentMethod, coup
     }
     subtotal = round2(subtotal);
 
+    // 2. Coupon (codes are not case-sensitive).
+    // FOR UPDATE locks the row so two orders can't both use the last redemption
     let discount = 0;
     let couponId = null;
-    if (couponCode) {
-      const { rows } = await client.query('SELECT * FROM coupon WHERE code = $1 FOR UPDATE', [couponCode]);
+    if (code) {
+      const { rows } = await client.query(
+        'SELECT * FROM coupon WHERE UPPER(code) = UPPER($1) FOR UPDATE', [code]);
       const c = rows[0];
       if (!c) throw new AppError('invalid coupon code');
       if (new Date(c.valid_until) < new Date()) throw new AppError('this coupon has expired');
@@ -44,12 +64,13 @@ async function placeOrder({ customerId, restaurantId, items, paymentMethod, coup
       couponId = c.id;
       await client.query('UPDATE coupon SET times_used = times_used + 1 WHERE id = $1', [c.id]);
     }
-    const total = round2(subtotal - discount);      
+    const total = round2(subtotal - discount);          // total_amount is what the customer pays
 
+    // 3. The order, its items, the payment and the delivery
     const { rows: [order] } = await client.query(
-      `INSERT INTO "order" (customer_id, restaurant_id, coupon_id, total_amount, discount_amount)
-       VALUES ($1, $2, $3, $4, $5) RETURNING id, status`,
-      [customerId, restaurantId, couponId, total, discount]
+      `INSERT INTO "order" (customer_id, restaurant_id, coupon_id, total_amount, discount_amount, delivery_address)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, status`,
+      [customerId, restaurantId, couponId, total, discount, address]
     );
     for (const it of items) {
       await client.query(
@@ -67,7 +88,7 @@ async function placeOrder({ customerId, restaurantId, items, paymentMethod, coup
 
     await client.query('COMMIT');
     return { orderId: order.id, status: order.status, subtotal, discount, total,
-             payment: { method: method.name, status: result.status } };
+             deliveryAddress: address, payment: { method: method.name, status: result.status } };
   } catch (err) {
     await client.query('ROLLBACK');
     throw err;
@@ -111,6 +132,7 @@ async function updateStatus(orderId, user, action, forcedStatus) {
 
     await client.query('UPDATE "order" SET status = $1 WHERE id = $2', [order.status, order.id]);
 
+    // the delivery has its own smaller state machine, so keep it in step
     if (order.status === 'picked_up') {
       await client.query(`UPDATE delivery SET status = 'picked_up' WHERE order_id = $1`, [order.id]);
     } else if (order.status === 'delivered') {
@@ -138,7 +160,23 @@ async function getOrderDetails(orderId, user) {
   const payment = (await pool.query('SELECT method, amount, status FROM payment WHERE order_id = $1', [orderId])).rows[0];
   const delivery = (await pool.query(
     'SELECT status, delivery_partner_id, payout_amount FROM delivery WHERE order_id = $1', [orderId])).rows[0];
-  return { order: row, items, payment, delivery };
+  const rating = (await pool.query('SELECT stars, comment FROM rating WHERE order_id = $1', [orderId])).rows[0] || null;
+
+  // Support requests are private to the customer and the admin
+  const requests = (user.role === 'customer' || user.role === 'admin')
+    ? (await pool.query(
+        `SELECT id, reason, status, refund_amount, created_at
+         FROM request WHERE order_id = $1 ORDER BY id`, [orderId])).rows
+    : [];
+
+  const restaurant = (await pool.query(
+    'SELECT restaurant_name, address FROM restaurant_profile WHERE id = $1', [row.restaurant_id])).rows[0];
+  const customer = (await pool.query('SELECT name FROM "user" WHERE id = $1', [row.customer_id])).rows[0];
+
+  // The restaurant does not need to know where the customer lives, so it never receives the address.
+  const orderOut = user.role === 'restaurant' ? withoutAddress(row) : row;
+
+  return { order: orderOut, items, payment, delivery, rating, requests, restaurant, customer };
 }
 
-module.exports = { placeOrder, updateStatus, getOrderDetails };
+module.exports = { placeOrder, updateStatus, getOrderDetails, withoutAddress };

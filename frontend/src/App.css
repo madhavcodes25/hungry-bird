@@ -1,10 +1,22 @@
+/* Deliberately plain: this is for testing features, not for looks. */
 body { font-family: system-ui, sans-serif; margin: 0; }
-nav { display: flex; gap: 16px; align-items: center; padding: 12px 20px; border-bottom: 1px solid #ddd; }
-nav a:first-child { font-weight: bold; margin-right: auto; }
-main { max-width: 720px; margin: 0 auto; padding: 20px; }
+nav { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; padding: 12px 20px; border-bottom: 1px solid #ccc; }
+nav .brand { font-weight: bold; }
+nav .spacer { flex: 1; }
+main { max-width: 860px; margin: 0 auto; padding: 20px; }
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.15rem; margin-top: 28px; }
 .list { list-style: none; padding: 0; }
-.list li { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
-.list li > :first-child { flex: 1; }
+.list li { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+.list li > :first-child { flex: 1; min-width: 160px; }
 .error { color: #b00020; }
-form { display: grid; gap: 10px; max-width: 320px; }
-.form-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.ok { color: #1b6e2d; }
+.muted { color: #666; font-size: 0.9rem; }
+form { display: grid; gap: 10px; max-width: 360px; margin: 10px 0; }
+form.inline { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; max-width: none; }
+.form-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 12px; }
+.badge { display: inline-block; padding: 1px 8px; border: 1px solid #999; border-radius: 10px; font-size: 0.8rem; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid #ddd; vertical-align: top; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; }
+.box { border: 1px solid #ddd; padding: 10px 14px; margin: 10px 0; }
