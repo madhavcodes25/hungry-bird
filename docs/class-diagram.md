@@ -151,11 +151,3 @@ classDiagram
 In the database, all four roles live in one `user` table with a `role` column. In the code, a role is a value that `requireRole` checks, not a class. Roles differ in what they are **allowed to do**, not in what data they hold or how objects of that type behave, so a `Customer` class and a `RestaurantOwner` class would carry the same fields and no distinct logic.
 
 The real polymorphism is where behavior varies by type: how a payment is processed (Strategy), what a status allows (State), and who gets told about a change (Observer). If you are asked in the viva, "I chose the pattern where the behavior actually differs, and used a role column and middleware where only the permissions differ."
-
-## 5. Extending it: adding wallet payments
-
-1. Add `class WalletPayment extends PaymentMethod` with `name` returning `'wallet'` and a `pay(amount)` method.
-2. Add one entry to the `METHODS` map in `payments.js`.
-3. Run `ALTER TYPE payment_method ADD VALUE 'wallet';` in the database.
-
-`OrderService`, `Order` and every other payment class stay unchanged. The database enum is the only place that needs a manual step.

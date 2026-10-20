@@ -22,7 +22,7 @@ npm install
 npm run dev
 ```
 
-`.env` (never commit this file; `.env.example` shows the shape):
+`.env.example` :
 
 ```
 PORT=3000

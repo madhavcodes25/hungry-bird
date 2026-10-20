@@ -132,14 +132,9 @@ npm test
 |---|---|
 | `backend/README.md` | Every API endpoint, with requests, responses and error codes |
 | `docs/class-diagram.md` | Class diagrams and the reasoning behind them |
-| `docs/sql-queries.md` and `db/queries.sql` | Three analytical queries with expected output |
-| `docs/index-experiment.md`, `db/perf_setup.sql`, `db/index_experiment.sql` | The index experiment on 200,000 orders |
-| `docs/deployment.md` | Free deployment on Neon, Render and Vercel |
-| `docs/viva-prep.md` | Demo script and likely questions with answers |
 
 ## Screenshots
 
-Add screenshots here, taken from your own running app. Suggested set: the restaurant list, a menu, the cart with a coupon, an order in progress, the restaurant's order page, the delivery partner's available deliveries, the admin requests page and the admin users page.
 
 ## Known limitations
 
@@ -160,11 +155,11 @@ backend/                 Express API
   src/domain/            order states, payment strategies, observers
   src/middleware/        authentication and role checks
   test/                  automated tests
-db/                      schema, demo data, queries, index experiment
-docs/                    diagrams, SQL notes, deployment guide, viva prep
+db/                      schema, demo data
+docs/                    diagrams
 frontend/                React app (one page per feature, for every role)
 ```
 
 ## Authors
 
-Add the names of everyone on your team here.
+
