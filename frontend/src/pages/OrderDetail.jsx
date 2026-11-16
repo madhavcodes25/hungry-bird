@@ -142,7 +142,7 @@ export default function OrderDetail() {
         </div>
         <button
           onClick={refresh}
-          style={{ backgroundColor: 'var(--gray-100)', color: 'var(--gray-800)', border: '1px solid var(--border-color)', boxShadow: 'none' }}
+          className="btn-secondary"
         >
           🔄 Refresh Status
         </button>
@@ -155,7 +155,7 @@ export default function OrderDetail() {
         <div style={{ display: 'grid', gap: '24px' }}>
           {/* Action Bar for Status progression */}
           {(canAdvance(order.status, role) || canCancel(order.status, role) || (next && role !== 'customer' && role !== 'admin')) && (
-            <div className="card" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #fff7f5 100%)', borderColor: 'var(--primary-border)' }}>
+            <div className="card" style={{ borderColor: 'var(--primary-border)' }}>
               <h3 style={{ margin: '0 0 12px' }}>Order Actions</h3>
               <div className="actions" style={{ margin: 0 }}>
                 {canAdvance(order.status, role) && (
@@ -172,7 +172,7 @@ export default function OrderDetail() {
                   <button
                     onClick={cancel}
                     disabled={busy}
-                    style={{ backgroundColor: 'var(--danger-subtle)', color: 'var(--danger)', border: '1px solid var(--danger-border)', boxShadow: 'none' }}
+                    className="btn-danger"
                   >
                     Cancel order
                   </button>

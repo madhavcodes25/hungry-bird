@@ -112,20 +112,10 @@ export default function Cart() {
                 <div
                   key={opt.id}
                   onClick={() => setPaymentMethod(opt.id)}
-                  style={{
-                    padding: '14px',
-                    borderRadius: 'var(--radius-md)',
-                    border: `2px solid ${paymentMethod === opt.id ? 'var(--primary)' : 'var(--border-color)'}`,
-                    backgroundColor: paymentMethod === opt.id ? 'var(--primary-subtle)' : '#ffffff',
-                    cursor: 'pointer',
-                    transition: 'all var(--transition-fast)',
-                    textAlign: 'center',
-                  }}
+                  className={`option-tile ${paymentMethod === opt.id ? 'selected' : ''}`}
                 >
-                  <div style={{ fontSize: '1.5rem', marginBottom: '4px' }}>{opt.icon}</div>
-                  <div style={{ fontWeight: 600, fontSize: '0.875rem', color: paymentMethod === opt.id ? 'var(--primary)' : 'var(--gray-800)' }}>
-                    {opt.label}
-                  </div>
+                  <div className="option-tile-icon">{opt.icon}</div>
+                  <div className="option-tile-label">{opt.label}</div>
                 </div>
               ))}
             </div>

@@ -53,7 +53,7 @@ export default function AdminCoupons() {
         <p className="muted">Create and manage promo discount codes for customer checkout.</p>
       </div>
 
-      <div className="card" style={{ marginBottom: '32px', background: 'linear-gradient(135deg, #ffffff 0%, #fffaf8 100%)' }}>
+      <div className="card" style={{ marginBottom: '32px' }}>
         <h2 style={{ margin: '0 0 16px', fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span>🏷️</span> Create New Coupon
         </h2>

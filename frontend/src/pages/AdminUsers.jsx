@@ -61,7 +61,8 @@ export default function AdminUsers() {
 
           <button
             onClick={() => setReload((n) => n + 1)}
-            style={{ backgroundColor: 'var(--gray-100)', color: 'var(--gray-800)', border: '1px solid var(--border-color)', boxShadow: 'none', marginLeft: 'auto' }}
+            className="btn-secondary"
+            style={{ marginLeft: 'auto' }}
           >
             🔄 Refresh
           </button>
@@ -125,7 +126,8 @@ export default function AdminUsers() {
                       <button
                         disabled={busyId === u.id}
                         onClick={() => setBan(u, false)}
-                        style={{ backgroundColor: 'var(--success-subtle)', color: 'var(--success-text)', border: '1px solid var(--success-border)', padding: '6px 14px', fontSize: '0.825rem', boxShadow: 'none' }}
+                        className="btn-success"
+                        style={{ padding: '6px 14px', fontSize: '0.825rem' }}
                       >
                         Unban
                       </button>
@@ -133,7 +135,8 @@ export default function AdminUsers() {
                       <button
                         disabled={busyId === u.id}
                         onClick={() => setBan(u, true)}
-                        style={{ backgroundColor: 'var(--danger-subtle)', color: 'var(--danger)', border: '1px solid var(--danger-border)', padding: '6px 14px', fontSize: '0.825rem', boxShadow: 'none' }}
+                        className="btn-danger"
+                        style={{ padding: '6px 14px', fontSize: '0.825rem' }}
                       >
                         Suspend
                       </button>

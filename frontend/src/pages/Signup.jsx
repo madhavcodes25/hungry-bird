@@ -67,20 +67,11 @@ export default function Signup() {
                 <div
                   key={opt.id}
                   onClick={() => setRole(opt.id)}
-                  style={{
-                    padding: '10px 8px',
-                    borderRadius: 'var(--radius-md)',
-                    border: `2px solid ${role === opt.id ? 'var(--primary)' : 'var(--border-color)'}`,
-                    backgroundColor: role === opt.id ? 'var(--primary-subtle)' : '#ffffff',
-                    cursor: 'pointer',
-                    textAlign: 'center',
-                    transition: 'all var(--transition-fast)',
-                  }}
+                  className={`option-tile ${role === opt.id ? 'selected' : ''}`}
+                  style={{ padding: '10px 8px' }}
                 >
-                  <div style={{ fontSize: '1.2rem', marginBottom: '2px' }}>{opt.icon}</div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: role === opt.id ? 'var(--primary)' : 'var(--gray-700)' }}>
-                    {opt.label}
-                  </div>
+                  <div className="option-tile-icon" style={{ fontSize: '1.25rem' }}>{opt.icon}</div>
+                  <div className="option-tile-label" style={{ fontSize: '0.8rem' }}>{opt.label}</div>
                 </div>
               ))}
             </div>

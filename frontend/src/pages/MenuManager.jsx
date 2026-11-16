@@ -55,7 +55,7 @@ function MenuRow({ item, token, onChanged }) {
           <button
             disabled={busy}
             onClick={() => { setEditing(false); setName(item.name); setPrice(String(Number(item.price))); }}
-            style={{ backgroundColor: 'var(--gray-100)', color: 'var(--gray-700)', border: '1px solid var(--border-color)', boxShadow: 'none' }}
+            className="btn-secondary"
           >
             Cancel
           </button>
@@ -77,7 +77,8 @@ function MenuRow({ item, token, onChanged }) {
             <button
               disabled={busy}
               onClick={() => setEditing(true)}
-              style={{ backgroundColor: 'var(--gray-100)', color: 'var(--gray-700)', border: '1px solid var(--border-color)', padding: '6px 12px', fontSize: '0.85rem', boxShadow: 'none' }}
+              className="btn-secondary"
+              style={{ padding: '6px 12px', fontSize: '0.85rem' }}
             >
               Edit
             </button>
@@ -98,7 +99,8 @@ function MenuRow({ item, token, onChanged }) {
             <button
               disabled={busy}
               onClick={() => call('DELETE', `/menu/${item.id}`)}
-              style={{ backgroundColor: 'var(--danger-subtle)', color: 'var(--danger)', border: '1px solid var(--danger-border)', padding: '6px 12px', fontSize: '0.85rem', boxShadow: 'none' }}
+              className="btn-danger"
+              style={{ padding: '6px 12px', fontSize: '0.85rem' }}
             >
               Delete
             </button>
@@ -143,7 +145,7 @@ export default function MenuManager() {
         <p className="muted">Create, edit, and control the availability of dishes at your restaurant.</p>
       </div>
 
-      <div className="card" style={{ marginBottom: '28px', background: 'linear-gradient(135deg, #ffffff 0%, #fffbf8 100%)' }}>
+      <div className="card" style={{ marginBottom: '28px' }}>
         <h2 style={{ margin: '0 0 14px', fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span>➕</span> Add a New Dish
         </h2>

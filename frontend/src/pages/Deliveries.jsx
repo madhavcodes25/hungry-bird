@@ -37,7 +37,7 @@ export default function Deliveries() {
         </div>
         <button
           onClick={() => setReload((n) => n + 1)}
-          style={{ backgroundColor: 'var(--gray-100)', color: 'var(--gray-800)', border: '1px solid var(--border-color)', boxShadow: 'none' }}
+          className="btn-secondary"
         >
           🔄 Check For Orders
         </button>

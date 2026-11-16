@@ -85,32 +85,32 @@ export default function Login() {
           <div style={{ fontWeight: 700, marginBottom: '6px', color: 'var(--gray-800)' }}>
             ⚡ Quick Demo Logins:
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '8px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
             <button
               type="button"
               onClick={() => fillDemo('asha@test.com', 'password123')}
-              style={{ padding: '4px 8px', fontSize: '0.75rem', backgroundColor: '#ffffff', color: 'var(--gray-700)', border: '1px solid var(--border-color)', boxShadow: 'none' }}
+              className="demo-btn"
             >
               Customer (Asha)
             </button>
             <button
               type="button"
               onClick={() => fillDemo('ravi@test.com', 'password123')}
-              style={{ padding: '4px 8px', fontSize: '0.75rem', backgroundColor: '#ffffff', color: 'var(--gray-700)', border: '1px solid var(--border-color)', boxShadow: 'none' }}
+              className="demo-btn"
             >
               Restaurant (Ravi)
             </button>
             <button
               type="button"
               onClick={() => fillDemo('kiran@test.com', 'password123')}
-              style={{ padding: '4px 8px', fontSize: '0.75rem', backgroundColor: '#ffffff', color: 'var(--gray-700)', border: '1px solid var(--border-color)', boxShadow: 'none' }}
+              className="demo-btn"
             >
               Delivery (Kiran)
             </button>
             <button
               type="button"
               onClick={() => fillDemo('admin@hungrybird.com', 'admin123')}
-              style={{ padding: '4px 8px', fontSize: '0.75rem', backgroundColor: '#ffffff', color: 'var(--gray-700)', border: '1px solid var(--border-color)', boxShadow: 'none' }}
+              className="demo-btn"
             >
               Admin
             </button>
