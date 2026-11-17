@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors'); // required since backend and frontend works on different ports!
 const pool = require('./db');
 
 if (!process.env.JWT_SECRET) {

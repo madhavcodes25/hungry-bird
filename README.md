@@ -135,6 +135,17 @@ npm test
 
 ## Screenshots
 
+### Homepage
+![Hungry Bird homepage](docs/screenshots/homepage.png)
+
+### Restaurant Menu Management
+![Restaurant menu page](docs/screenshots/restaurant.png)
+
+### Delivery Partner Earnings
+![delivery partner page](docs/screenshots/delivery-partner.png)
+
+### Coupons Dashbaord
+![Coupons dashboard](docs/screenshots/admin.png)
 
 ## Known limitations
 
@@ -159,7 +170,5 @@ db/                      schema, demo data
 docs/                    diagrams
 frontend/                React app (one page per feature, for every role)
 ```
-
-## Authors
 
 
